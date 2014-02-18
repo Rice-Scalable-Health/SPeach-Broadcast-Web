@@ -1,29 +1,64 @@
-var sharedTextApp = angular.module('sharedTextApp', ["xeditable"]);
+var sharedTextApp = angular.module('sharedTextApp', ["xeditable", 'textAngular', 'ngSanitize']);
 
 // Boot strapping CSS for xeditables
 sharedTextApp.run(function(editableOptions) {
     editableOptions.theme = 'bs3'; // bootstrap3 theme. Can be also 'bs2', 'default'
 });
 
+sharedTextApp.factory('txt', function() {
+    var str = "";
+    var modify = {};
+    modify.set = function(str_in) {
+        str = str_in;
+    }
+    modify.append = function(item) {
+        str = str + item + ' ';
+        return 'added item';
+    };
+    modify.edit = function(before, after) {
+        console.log("before: " + before + " after: " + after);
+        console.log("replaced: " + str);
+        str = str.replace(before, after);
+        console.log("replaced: " + str);
+    }
+    modify.getString = function() {
+        return str;
+    };
+    return modify;
+});
+
 // Object to keep track of all the utterances
-sharedTextApp.factory('db', function() {
+sharedTextApp.factory('db', function(txt) {
+    var str = "";
     var items = [];
     var modify = {};
     modify.addItem = function(index, item) {
-        if (index > items.length - 1)
+        if (index > items.length - 1) {
             items.push({name: item});
-        else if (items[index].name != item)
+            txt.append(item);
+            console.log(item);
+        }
+        else if (items[index].name != item) {
+            txt.edit(items[index].name, item);
             items[index].name = item;
+            console.log("modified");
+        }
         return 'added item';
     };
     modify.getItems = function() {
         return items;
     };
+    modify.getString = function() {
+        str = "";
+        for (var s in items)
+            str = str.concat(items[s].name, ' ');
+        return str;
+    }
     return modify;
 });
 
 // Controller
-sharedTextApp.controller('SharedTxtCtrl', function($scope, $http, $filter, db) {
+sharedTextApp.controller('SharedTxtCtrl', function($scope, $http, $filter, db, txt) {
 	
 	// Event Listeners
     var source = new EventSource('api/stream');
@@ -44,6 +79,9 @@ sharedTextApp.controller('SharedTxtCtrl', function($scope, $http, $filter, db) {
 //                    db.addItem(index++, option.text);
 //                }
             }
+
+            // update textAngular
+            $scope.htmlcontent = txt.getString();
 	    });
 	}, false);
 
@@ -78,6 +116,17 @@ sharedTextApp.controller('SharedTxtCtrl', function($scope, $http, $filter, db) {
             url: 'api/modify',
             data: [index, text]
         });
+
+        // update local
+        db.addItem(index, text);
+
+        // update textAngular
+        $scope.htmlcontent = txt.getString();
+
+    };
+
+    $scope.save = function(){
+        txt.set($scope.htmlcontent);
     };
 
     // Array holding all the utterances

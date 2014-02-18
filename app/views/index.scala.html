@@ -16,10 +16,18 @@ a:hover { background-color:yellow; }
       	<button ng-click="sendData()">Send</button>
 	</div>
 	<br>
+	<div>
+		<form ng-submit="save()">
+		<div text-angular="text-angular" name="htmlcontent" ng-model="htmlcontent" ta-disabled='disabled'>
+  		<button class="btn btn-primary" type="submit">Save</button>
+  		</form>
+	</div>
+	<div ta-bind="text" ng-model="htmlcontent" ta-readonly='disabled'></div>
+	<br>
 
 	<!-- Text output area. Propagates using ng-repeat -->
 	<div style="padding-left:2cm;">
-   		<a href="#" ng-repeat="user in editables" editable-text="user.name" onbeforesave="sendDataFromEditables($index, $data)">{{ user.name || "◻︎" }}<br></a>
+   		<a href="#" ng-repeat="user in editables" editable-text="user.name" onbeforesave="sendDataFromEditables($index, $data)">{{ user.name || "empty" }} </a>
     	<!-- <a href="#" editable-select="user.status" e-ng-options="s.value as s.text for s in statuses">{{ showStatus() }}</a> -->
     </div>
 </div>

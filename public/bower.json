@@ -5,6 +5,9 @@
     "angular": "latest",
     "bootstrap": "latest",
     "angular-xeditable": "latest",
-    "bootstrap": "latest"
+    "angular-sanitize" : "latest",
+    "bootstrap": "latest",
+    "textAngular": "latest",
+    "Font-Awesome": "latest"
   }
 }
