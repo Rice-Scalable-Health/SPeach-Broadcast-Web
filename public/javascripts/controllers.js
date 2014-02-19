@@ -5,6 +5,7 @@ sharedTextApp.run(function(editableOptions) {
     editableOptions.theme = 'bs3'; // bootstrap3 theme. Can be also 'bs2', 'default'
 });
 
+// Factory for the textAngular text box
 sharedTextApp.factory('txt', function() {
     var str = "";
     var modify = {};
@@ -32,6 +33,7 @@ sharedTextApp.factory('db', function(txt) {
     var str = "";
     var items = [];
     var modify = {};
+    // 
     modify.addItem = function(index, item) {
         if (index > items.length - 1) {
             items.push({name: item});
@@ -45,20 +47,22 @@ sharedTextApp.factory('db', function(txt) {
         }
         return 'added item';
     };
+    //
     modify.getItems = function() {
         return items;
     };
-    modify.getString = function() {
+    //
+    modify.getHTML = function() {
         str = "";
         for (var s in items)
-            str = str.concat(items[s].name, ' ');
+            str = str.concat("<a href=\"#\" editable-text=\"editables[", s.toString(), "].name\" onbeforesave=\"sendDataFromEditables(", s.toString(), ", $data)\">{{ editables[", s.toString(), "].name || \"empty\" }} </a>");
         return str;
     }
     return modify;
 });
 
 // Controller
-sharedTextApp.controller('SharedTxtCtrl', function($scope, $http, $filter, db, txt) {
+sharedTextApp.controller('SharedTxtCtrl', function($scope, $http, $filter, $sce, db, txt) {
 	
 	// Event Listeners
     var source = new EventSource('api/stream');
@@ -82,6 +86,10 @@ sharedTextApp.controller('SharedTxtCtrl', function($scope, $http, $filter, db, t
 
             // update textAngular
             $scope.htmlcontent = txt.getString();
+
+            // update directive template
+            $scope.html = db.getHTML();
+
 	    });
 	}, false);
 
@@ -125,13 +133,14 @@ sharedTextApp.controller('SharedTxtCtrl', function($scope, $http, $filter, db, t
 
     };
 
+    // Behavior when the user hits the save button
     $scope.save = function(){
         txt.set($scope.htmlcontent);
     };
 
     // Array holding all the utterances
     $scope.editables = db.getItems();
-
+    $scope.html = db.getHTML();
 
     // The rest is needed for select. This is here just for testing
     $scope.user = {
@@ -148,5 +157,26 @@ sharedTextApp.controller('SharedTxtCtrl', function($scope, $http, $filter, db, t
     $scope.showStatus = function() {
         var selected = $filter('filter')($scope.statuses, {value: $scope.user.status});
         return ($scope.user.status && selected.length) ? selected[0].text : 'Not set';
+    };
+
+});
+
+// Directive
+sharedTextApp.directive('helloWorld', function ($compile, db) {
+    var linker = function(scope, element, attrs) {
+        reload = function() {
+            template = angular.element(element.html(scope.html));
+            $compile(template.contents())(scope);
+        }
+
+        scope.$watch('html', function() {reload();});
+    }
+
+    return {
+        restrict: 'E',
+        replace: true,
+        link: linker,
+        //template: '<a href="#" editable-text="editables[1].name" onbeforesave="sendDataFromEditables(1, $data)">{{ editables[1].name || "empty" }}</a>',
+        //template: '<p ng-bind-html="output"></p>',
     };
 });

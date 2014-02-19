@@ -27,7 +27,8 @@ a:hover { background-color:yellow; }
 
 	<!-- Text output area. Propagates using ng-repeat -->
 	<div style="padding-left:2cm;">
-   		<a href="#" ng-repeat="user in editables" editable-text="user.name" onbeforesave="sendDataFromEditables($index, $data)">{{ user.name || "empty" }} </a>
+		<hello-world></hello-world>
+   		<!-- <a href="#" ng-repeat="user in editables" editable-text="user.name" onbeforesave="sendDataFromEditables($index, $data)">{{ user.name || "empty" }} </a> -->
     	<!-- <a href="#" editable-select="user.status" e-ng-options="s.value as s.text for s in statuses">{{ showStatus() }}</a> -->
     </div>
 </div>
