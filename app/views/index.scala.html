@@ -11,10 +11,10 @@ a:hover { background-color:yellow; }
 <!-- Main text output area -->
 <div ng-controller="SharedTxtCtrl">
 	<!-- Box to send data to server -->
-	<div>
+	<!-- <div>
 		<input type="text" ng-model="inputText" />
       	<button ng-click="sendData()">Send</button>
-	</div>
+	</div> -->
 
 	<br>
 	<button ng-click="getView()">View</button>
@@ -28,11 +28,9 @@ a:hover { background-color:yellow; }
 	    	<!-- <a href="#" editable-select="user.status" e-ng-options="s.value as s.text for s in statuses">{{ showStatus() }}</a> -->
 	    </div>
         <div ng-switch-when="markup">
-        	<input type="text" ng-model="htmlcontent"></input>
 			<div ng-controller="test">
     			<div text-angular ng-model="htmlcontent"></div>
 			</div>
-			<div ta-bind="text" ng-model="htmlcontent"></div>
 		</div>
     </div>
 	<br>
