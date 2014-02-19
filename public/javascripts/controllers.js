@@ -1,49 +1,25 @@
-var sharedTextApp = angular.module('sharedTextApp', ["xeditable", 'textAngular', 'ngSanitize']);
+var sharedTextApp = angular.module('sharedTextApp', ['textAngular', 'xeditable']);
 
 // Boot strapping CSS for xeditables
 sharedTextApp.run(function(editableOptions) {
     editableOptions.theme = 'bs3'; // bootstrap3 theme. Can be also 'bs2', 'default'
 });
 
-// Factory for the textAngular text box
-sharedTextApp.factory('txt', function() {
-    var str = "";
-    var modify = {};
-    modify.set = function(str_in) {
-        str = str_in;
-    }
-    modify.append = function(item) {
-        str = str + item + ' ';
-        return 'added item';
-    };
-    modify.edit = function(before, after) {
-        console.log("before: " + before + " after: " + after);
-        console.log("replaced: " + str);
-        str = str.replace(before, after);
-        console.log("replaced: " + str);
-    }
-    modify.getString = function() {
-        return str;
-    };
-    return modify;
-});
-
 // Object to keep track of all the utterances
-sharedTextApp.factory('db', function(txt) {
+sharedTextApp.factory('db', function() {
+    var html = "";
     var str = "";
+    var markup = "";
+
     var items = [];
     var modify = {};
     // 
     modify.addItem = function(index, item) {
         if (index > items.length - 1) {
-            items.push({name: item});
-            txt.append(item);
-            console.log(item);
+            items.push({name: item, isHTML: true});
         }
-        else if (items[index].name != item) {
-            txt.edit(items[index].name, item);
+        else if (items[index].name != item && items[index].isHTML) {
             items[index].name = item;
-            console.log("modified");
         }
         return 'added item';
     };
@@ -52,17 +28,102 @@ sharedTextApp.factory('db', function(txt) {
         return items;
     };
     //
+    modify.storeMarkup = function(newVal) {
+        newVal = newVal.replace("</div>", "");
+        newVal = newVal.replace("</span><br></li>", "");
+        newVal = newVal.replace("</ul>", "");
+        newVal = newVal.replace("</li>", "");
+        markup = newVal;
+        return "stored";
+    };
+    //
+    modify.addMarkup = function(len) {
+        for (var s = 0; s < len;) {
+            if (markup.search(items[s].name) >= 0) {
+                if (markup.search(items[s].name.concat(' ')) >= 0) {
+                    markup = markup.replace(items[s].name.concat(' '), "");
+                } else {
+                    markup = markup.replace(items[s].name, "");
+                }
+                
+                s++;
+            } else {
+                // find the next match
+                var n = 0;
+                var i = s;
+                for (; i < len; i++) {
+                    if (markup.search(items[i].name) >= 0) {
+                        n = markup.indexOf(items[i].name);
+                        break;
+                    }
+                }
+
+                var res = "";
+                if (n == 0)
+                    res = markup;
+                else
+                    res = markup.substring(0,n);
+
+                // Process the resulting string
+                markup = markup.replace(res, "");
+
+                items[s].name = res;
+                items[s].isHTML = false;
+
+                // deal with all others that was skipped
+                for (var j = s+1; j < i; j++){
+                    items[j].name = "";
+                    items[j].isHTML = false;
+                }
+
+                s = i;
+            }
+        }
+
+        // If there is something left at the end, append it to the very last index
+        if (0 != markup.length) {
+            items[len-1].name = items[len-1].name.concat(markup);
+            items[len-1].isHTML = false; // Every last one cannot be marked up
+        }
+
+        return 'marked up';
+    };
+    //
     modify.getHTML = function() {
+        html = "";
+        for (var s in items) {
+            if (items[s].isHTML)
+                html = html.concat("<a href=\"#\" editable-text=\"editables[", s.toString(), "].name\" onbeforesave=\"sendDataFromEditables(", s.toString(), ", $data)\">{{ editables[", s.toString(), "].name || \"empty\" }} </a>");
+            else
+                html = html.concat(items[s].name);
+        }
+        return html;
+    }
+    //
+    modify.getString = function() {
         str = "";
-        for (var s in items)
-            str = str.concat("<a href=\"#\" editable-text=\"editables[", s.toString(), "].name\" onbeforesave=\"sendDataFromEditables(", s.toString(), ", $data)\">{{ editables[", s.toString(), "].name || \"empty\" }} </a>");
+        for (var s in items) {
+            str = str.concat(items[s].name, ' ');
+        }
         return str;
+    }
+    //
+    modify.getLen = function() {
+        return items.length;
     }
     return modify;
 });
 
+// Controller for the htmlcontent
+sharedTextApp.controller('test', function($scope, db){
+    $scope.$watch('htmlcontent', function(newVal){
+        console.log(newVal);
+        db.storeMarkup(newVal);
+    });
+});
+
 // Controller
-sharedTextApp.controller('SharedTxtCtrl', function($scope, $http, $filter, $sce, db, txt) {
+sharedTextApp.controller('SharedTxtCtrl', function($scope, $http, $filter, $sce, db) {
 	
 	// Event Listeners
     var source = new EventSource('api/stream');
@@ -83,9 +144,6 @@ sharedTextApp.controller('SharedTxtCtrl', function($scope, $http, $filter, $sce,
 //                    db.addItem(index++, option.text);
 //                }
             }
-
-            // update textAngular
-            $scope.htmlcontent = txt.getString();
 
             // update directive template
             $scope.html = db.getHTML();
@@ -128,36 +186,31 @@ sharedTextApp.controller('SharedTxtCtrl', function($scope, $http, $filter, $sce,
         // update local
         db.addItem(index, text);
 
-        // update textAngular
-        $scope.htmlcontent = txt.getString();
-
     };
 
-    // Behavior when the user hits the save button
-    $scope.save = function(){
-        txt.set($scope.htmlcontent);
-    };
+    // Change view
+    $scope.selection = 'view';
 
-    // Array holding all the utterances
+    $scope.getView = function() {
+        if ($scope.selection != 'view') {
+            $scope.selection = 'view';
+            db.addMarkup($scope.lastIndex);
+            $scope.html = db.getHTML();
+        }
+    }
+
+    $scope.getMarkup = function() {
+        if ($scope.selection != 'markup'){
+            $scope.selection = 'markup';
+            $scope.htmlcontent = db.getString();
+            $scope.lastIndex = db.getLen();
+        }
+    }
+
+    // Initialization of variables
     $scope.editables = db.getItems();
     $scope.html = db.getHTML();
-
-    // The rest is needed for select. This is here just for testing
-    $scope.user = {
-        status: 2
-    }; 
-
-    $scope.statuses = [
-        {value: 1, text: 'status1'},
-        {value: 2, text: 'status2'},
-        {value: 3, text: 'status3'},
-        {value: 4, text: 'status4'}
-    ]; 
-
-    $scope.showStatus = function() {
-        var selected = $filter('filter')($scope.statuses, {value: $scope.user.status});
-        return ($scope.user.status && selected.length) ? selected[0].text : 'Not set';
-    };
+    $scope.htmlcontent = "";
 
 });
 
