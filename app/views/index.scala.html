@@ -16,13 +16,14 @@ a:hover { background-color:yellow; }
       	<button ng-click="sendData()">Send</button>
 	</div> -->
 
-	<br>
-	<button ng-click="getView()">View</button>
-	<button ng-click="getMarkup()">Markup</button>
+	<div style="padding-top:0.8cm; padding-left:0.2cm;">
+		<button ng-click="getView()">View</button>
+		<button ng-click="getMarkup()">Markup</button>
+	</div>
 
 	<div ng-switch on="selection">
         <!-- Text output area. Propagates using ng-repeat -->
-		<div style="padding-top:0.8cm; padding-left:0.2cm;" ng-switch-when="view">
+		<div style="padding-top:0.8cm; padding-left:0.2cm; padding-right:0.2cm;" ng-switch-when="view">
 			<hello-world></hello-world>
 	   		<!-- <a href="#" ng-repeat="user in editables" editable-text="user.name" onbeforesave="sendDataFromEditables($index, $data)">{{ user.name || "empty" }} </a> -->
 	    	<!-- <a href="#" editable-select="user.status" e-ng-options="s.value as s.text for s in statuses">{{ showStatus() }}</a> -->
@@ -32,14 +33,6 @@ a:hover { background-color:yellow; }
     			<div text-angular ng-model="htmlcontent"></div>
 			</div>
 		</div>
-    </div>
-	<br>
-
-	<!-- Text output area. Propagates using ng-repeat -->
-	<div style="padding-left:2cm;">
-		<hello-world></hello-world>
-   		<!-- <a href="#" ng-repeat="user in editables" editable-text="user.name" onbeforesave="sendDataFromEditables($index, $data)">{{ user.name || "empty" }} </a> -->
-    	<!-- <a href="#" editable-select="user.status" e-ng-options="s.value as s.text for s in statuses">{{ showStatus() }}</a> -->
     </div>
 </div>
 }
