@@ -54,6 +54,10 @@ public class Utterance extends Model {
 
         return utterance;
     }
+    
+    public long getId() {
+    	return id;
+    }
 
     /**
      * Returns a JSON String of the utterance with all its options..

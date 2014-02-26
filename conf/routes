@@ -8,7 +8,7 @@ GET     /                           controllers.Application.index()
 GET     /api/stream                 controllers.Application.getUtterances()
 POST    /api/add                    controllers.Application.addUtterance()
 POST    /api/modify                 controllers.Application.modifyOption()
-POST    /api/upvote                 controllers.Application.upvoteOption()
+POST    /api/upvote/:id		        controllers.Application.upvoteOption(id:long)
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
