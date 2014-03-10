@@ -29,10 +29,10 @@ sharedTextApp.factory('db', function() {
     };
     //
     modify.storeMarkup = function(newVal) {
-        newVal = newVal.replace("</div>", "");
-        newVal = newVal.replace("</span><br></li>", "");
-        newVal = newVal.replace("</ul>", "");
-        newVal = newVal.replace("</li>", "");
+        // newVal = newVal.replace("</div>", "");
+        // newVal = newVal.replace("</span><br></li>", "");
+        // newVal = newVal.replace("</ul>", "");
+        // newVal = newVal.replace("</li>", "");
         markup = newVal;
         return "stored";
     };
