@@ -18,6 +18,7 @@ create table shared_transcript (
 
 create table utterance (
   id                        bigint not null,
+  utterance_id              bigint,
   constraint pk_utterance primary key (id))
 ;
 

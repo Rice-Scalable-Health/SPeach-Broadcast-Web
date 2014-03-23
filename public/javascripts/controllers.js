@@ -88,6 +88,12 @@ sharedTextApp.controller('SharedTxtCtrl', function($scope, $http, $filter, db) {
     };
 
     $scope.unblockOption = function(index) {
+        setTimeout(function() {
+            __unblockOption(index);
+        }, 300);
+    };
+
+    var __unblockOption = function(index) {
         var editable = $scope.editables[index];
 
         $http({
@@ -141,7 +147,7 @@ sharedTextApp.controller('SharedTxtCtrl', function($scope, $http, $filter, db) {
     }
 
     window.onbeforeunload = function() {
-        if ($scope.openXEditableIndex) {
+        if ($scope.openXEditableIndex > 0 && $scope.openXEditableIndex !== undefined) {
             $scope.unblockOption($scope.openXEditableIndex);
             return "Make sure you save/cancel changes before you leave the page";
         }

@@ -129,7 +129,7 @@ public class SharedTranscript extends Model {
      * @param optionId The id of the option that needs to be blocked.
      */
     public void blockOption(int utteranceId, int optionId) {
-        Utterance utteranceToChange = Utterance.find.byId((long) utteranceId);
+        Utterance utteranceToChange = Utterance.findById((long) utteranceId);
         utteranceToChange.blockOption(optionId);
 
         UpdateMessenger.singleton.tell("UPDATE", null);
@@ -141,7 +141,7 @@ public class SharedTranscript extends Model {
      * @param optionId The id of the option that needs to be unblocked.
      */
     public void unblockOption(int utteranceId, int optionId) {
-        Utterance utteranceToChange = Utterance.find.byId((long) utteranceId);
+        Utterance utteranceToChange = Utterance.findById((long) utteranceId);
         utteranceToChange.unblockOption(optionId);
 
         UpdateMessenger.singleton.tell("UPDATE", null);
@@ -154,7 +154,7 @@ public class SharedTranscript extends Model {
      * @param newValue The value to change to.
      */
     public void modifySharedTranscript(int utteranceId, int optionId, String newValue) {
-        Utterance utteranceToChange = Utterance.find.byId((long) utteranceId);
+        Utterance utteranceToChange = Utterance.findById((long) utteranceId);
         utteranceToChange.changeText(optionId, newValue);
 
         UpdateMessenger.singleton.tell("UPDATE", null);

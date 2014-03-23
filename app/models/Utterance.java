@@ -21,6 +21,15 @@ public class Utterance extends Model {
     @Id
     private long id;
 
+    public long getUtteranceId() {
+        return utteranceId;
+    }
+
+    /**
+     * We are having a seperate id, because ebean will choose kind of random ids for @Id.
+     */
+    private long utteranceId;
+
     /**
      * The list of options for this utterance.
      */
@@ -35,7 +44,17 @@ public class Utterance extends Model {
     /**
      * Constructor for utterance.
      */
-    public Utterance() {
+    public Utterance(long utteranceId) {
+        this.utteranceId = utteranceId;
+    }
+
+    public static Utterance findById(long utteranceId) {
+        for (Utterance utterance : Utterance.find.all()) {
+            if (utterance.getUtteranceId() == utteranceId) {
+                return utterance;
+            }
+        }
+        return null;
     }
 
     /**
@@ -44,7 +63,14 @@ public class Utterance extends Model {
      * @return The newly created utterance.
      */
     public static Utterance create(String text) {
-        Utterance utterance = new Utterance();
+        long maxUtteranceId = 1;
+        for (Utterance utterance : Utterance.find.all()) {
+            if (utterance.getUtteranceId() > maxUtteranceId) {
+                maxUtteranceId = utterance.getUtteranceId();
+            }
+        }
+
+        Utterance utterance = new Utterance(maxUtteranceId+1);
         utterance.save();
 
         // init option
@@ -63,7 +89,7 @@ public class Utterance extends Model {
         StringBuilder sb = new StringBuilder();
 
         sb.append("\"");
-        sb.append(this.id);
+        sb.append(this.getUtteranceId());
         sb.append("\":{");
         for (int i = 0; i < optionList.size(); i++) {
             Option option = optionList.get(i);
