@@ -9,13 +9,14 @@ sharedTextApp.run(function(editableOptions) {
 sharedTextApp.factory('db', function() {
     var items = [];
     var modify = {};
-    modify.addItem = function(index, utteranceIndex, optionIndex, item) {
+    modify.addItem = function(index, utteranceIndex, optionIndex, item, blocked) {
         if (index > items.length - 1)
-            items.push({name: item, utteranceIndex: utteranceIndex, optionIndex: optionIndex});
+            items.push({name: item, utteranceIndex: utteranceIndex, optionIndex: optionIndex, blocked: blocked});
         else if (items[index].name != item) {
             items[index].name = item;
             items[index].utteranceIndex = utteranceIndex;
             items[index].optionIndex = optionIndex;
+            items[index].blocked = blocked;
         }
         return 'added item';
     };
@@ -44,7 +45,7 @@ sharedTextApp.controller('SharedTxtCtrl', function($scope, $http, $filter, db) {
                 for (var optionId in utterance) {
                     var option = utterance[optionId];
                     // add item to db with utteranceId and optionId
-                    db.addItem(index++, utteranceId, optionId, option.text);
+                    db.addItem(index++, utteranceId, optionId, option.text, option.blocked);
                 }
             }
 	    });
@@ -70,6 +71,18 @@ sharedTextApp.controller('SharedTxtCtrl', function($scope, $http, $filter, db) {
         $scope.inputText = ""
     };
 
+    $scope.blockOption = function(index) {
+        var editable = $scope.editables[index];
+        $http({
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            url: 'api/blockoption',
+            data: [editable.utteranceIndex, editable.optionIndex]
+        });
+    };
+
     // Function for the xeditables to send data to server
     // Requires the index of text to edit and the updated text
     $scope.sendDataFromEditables = function(index, text) {
@@ -86,6 +99,10 @@ sharedTextApp.controller('SharedTxtCtrl', function($scope, $http, $filter, db) {
 
     // Array holding all the utterances
     $scope.editables = db.getItems();
+
+    $scope.edit = function(editablesIndex) {
+        
+    };
 
 
     // The rest is needed for select. This is here just for testing

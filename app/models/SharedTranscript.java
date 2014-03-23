@@ -124,6 +124,18 @@ public class SharedTranscript extends Model {
     }
 
     /**
+     * Blocks the utterance to be edited.
+     * @param utteranceId The id of the utterance to block.
+     * @param optionId The id of the option that needs to be blocked.
+     */
+    public void blockOption(int utteranceId, int optionId) {
+        Utterance utteranceToChange = Utterance.find.byId((long) utteranceId);
+        utteranceToChange.blockOption(optionId);
+
+        UpdateMessenger.singleton.tell("UPDATE", null);
+    }
+
+    /**
      * Changes the value of the shared transcript at an index.
      * @param utteranceId The id of the utterance that needs to be changed.
      * @param optionId The id of the option that needs to be changed.

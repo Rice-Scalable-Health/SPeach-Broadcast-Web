@@ -6,6 +6,7 @@
 create table option (
   id                        bigint not null,
   text                      varchar(255),
+  blocked                   boolean,
   parent_id                 bigint,
   constraint pk_option primary key (id))
 ;

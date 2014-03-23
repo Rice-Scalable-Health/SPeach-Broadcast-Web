@@ -23,6 +23,27 @@ public class Option extends Model {
     private String text;
 
     /**
+     * Whether the utterance is blocked from editing.
+     * @return true if the utterance is blocked, false otherwise.
+     */
+    public boolean isBlocked() {
+        return blocked;
+    }
+
+    /**
+     * Sets the new value for the blocked status of this utterance.
+     * @param blocked The new value for the blocked status of this utterance.
+     */
+    public void setBlocked(boolean blocked) {
+        this.blocked = blocked;
+    }
+
+    /**
+     * Whether or not this utterance is blocked from edits.
+     */
+    private boolean blocked = false;
+
+    /**
      * The utterance that this option belongs to.
      */
     @ManyToOne
@@ -64,6 +85,6 @@ public class Option extends Model {
     }
 
     public String toString() {
-        return "\""+this.id+"\":{\"upvotes\":"+1+",\"text\":\""+this.text+"\"}";
+        return "\""+this.id+"\":{\"blocked\":"+blocked+",\"upvotes\":"+1+",\"text\":\""+this.text+"\"}";
     }
 }

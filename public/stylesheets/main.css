@@ -1,0 +1,4 @@
+.blocked {
+    color: #333 !important;
+    pointer-events: none !important;
+}
