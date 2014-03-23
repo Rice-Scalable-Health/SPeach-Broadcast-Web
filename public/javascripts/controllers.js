@@ -39,6 +39,7 @@ sharedTextApp.controller('SharedTxtCtrl', function($scope, $http, $filter, db) {
 
             var dataJSON = JSON.parse(e.data);
 
+            var utteranceIds = [];
             for (var utteranceId in dataJSON) {
                 var utterance = dataJSON[utteranceId];
                 // add in this code for when we have options.
@@ -142,8 +143,7 @@ sharedTextApp.controller('SharedTxtCtrl', function($scope, $http, $filter, db) {
     window.onbeforeunload = function() {
         if ($scope.openXEditableIndex) {
             $scope.unblockOption($scope.openXEditableIndex);
+            return "Make sure you save/cancel changes before you leave the page";
         }
-
-        return "Make sure you save/cancel changes before you leave the page";
     };
 });
