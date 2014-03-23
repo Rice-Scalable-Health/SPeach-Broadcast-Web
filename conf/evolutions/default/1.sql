@@ -11,6 +11,13 @@ create table option (
   constraint pk_option primary key (id))
 ;
 
+create table raw_utterance (
+  id                        bigint not null,
+  text                      TEXT,
+  confidence                double,
+  constraint pk_raw_utterance primary key (id))
+;
+
 create table shared_transcript (
   id                        bigint not null,
   constraint pk_shared_transcript primary key (id))
@@ -36,6 +43,8 @@ create table utterance_option (
 ;
 create sequence option_seq;
 
+create sequence raw_utterance_seq;
+
 create sequence shared_transcript_seq;
 
 create sequence utterance_seq;
@@ -59,6 +68,8 @@ SET REFERENTIAL_INTEGRITY FALSE;
 
 drop table if exists option;
 
+drop table if exists raw_utterance;
+
 drop table if exists shared_transcript;
 
 drop table if exists shared_transcript_utterance;
@@ -70,6 +81,8 @@ drop table if exists utterance_option;
 SET REFERENTIAL_INTEGRITY TRUE;
 
 drop sequence if exists option_seq;
+
+drop sequence if exists raw_utterance_seq;
 
 drop sequence if exists shared_transcript_seq;
 
