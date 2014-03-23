@@ -26,7 +26,7 @@ public class Utterance extends Model {
     }
 
     /**
-     * We are having a seperate id, because ebean will choose kind of random ids for @Id.
+     * We are having a separate id, because ebean will choose kind of random ids for @Id.
      */
     private long utteranceId;
 
