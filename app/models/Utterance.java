@@ -109,6 +109,11 @@ public class Utterance extends Model {
 
     public void blockOption(int optionId) {
         Option optionToChange = Option.find.byId((long) optionId);
+        optionToChange.setBlocked(true);
+    }
+
+    public void unblockOption(int optionId) {
+        Option optionToChange = Option.find.byId((long) optionId);
         optionToChange.setBlocked(false);
     }
 }

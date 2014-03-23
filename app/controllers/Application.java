@@ -26,6 +26,20 @@ public class Application extends Controller {
         return ok();
     }
 
+    public static Result unblockOption() {
+        Http.RequestBody body = request().body();
+        JsonNode jsonNode = body.asJson();
+
+        int utteranceIndex = jsonNode.get(0).asInt();
+        int optionIndex = jsonNode.get(1).asInt();
+
+        SharedTranscript ourText = SharedTranscript.getOnlySharedTranscript();
+
+        ourText.unblockOption(utteranceIndex, optionIndex);
+
+        return ok();
+    }
+
     public static Result addUtterance() {
         Http.RequestBody body = request().body();
         String textBody = body.asText();

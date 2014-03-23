@@ -36,6 +36,7 @@ public class Option extends Model {
      */
     public void setBlocked(boolean blocked) {
         this.blocked = blocked;
+        this.save();
     }
 
     /**

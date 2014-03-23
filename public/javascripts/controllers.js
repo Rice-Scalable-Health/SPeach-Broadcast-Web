@@ -12,7 +12,7 @@ sharedTextApp.factory('db', function() {
     modify.addItem = function(index, utteranceIndex, optionIndex, item, blocked) {
         if (index > items.length - 1)
             items.push({name: item, utteranceIndex: utteranceIndex, optionIndex: optionIndex, blocked: blocked});
-        else if (items[index].name != item) {
+        else if (items[index].name != item || items[index].blocked != blocked) {
             items[index].name = item;
             items[index].utteranceIndex = utteranceIndex;
             items[index].optionIndex = optionIndex;
@@ -73,14 +73,32 @@ sharedTextApp.controller('SharedTxtCtrl', function($scope, $http, $filter, db) {
 
     $scope.blockOption = function(index) {
         var editable = $scope.editables[index];
+
+        if (!editable.blocked) {
+            $http({
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                url: 'api/blockoption',
+                data: [editable.utteranceIndex, editable.optionIndex]
+            });
+        }
+    };
+
+    $scope.unblockOption = function(index) {
+        var editable = $scope.editables[index];
+
         $http({
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            url: 'api/blockoption',
+            url: 'api/unblockoption',
             data: [editable.utteranceIndex, editable.optionIndex]
         });
+
+        $scope.openXEditableIndex = -1;
     };
 
     // Function for the xeditables to send data to server
@@ -100,11 +118,6 @@ sharedTextApp.controller('SharedTxtCtrl', function($scope, $http, $filter, db) {
     // Array holding all the utterances
     $scope.editables = db.getItems();
 
-    $scope.edit = function(editablesIndex) {
-        
-    };
-
-
     // The rest is needed for select. This is here just for testing
     $scope.user = {
         status: 2
@@ -120,5 +133,17 @@ sharedTextApp.controller('SharedTxtCtrl', function($scope, $http, $filter, db) {
     $scope.showStatus = function() {
         var selected = $filter('filter')($scope.statuses, {value: $scope.user.status});
         return ($scope.user.status && selected.length) ? selected[0].text : 'Not set';
+    };
+
+    $scope.saveXEditableIndex = function(index) {
+        $scope.openXEditableIndex = index;
+    }
+
+    window.onbeforeunload = function() {
+        if ($scope.openXEditableIndex) {
+            $scope.unblockOption($scope.openXEditableIndex);
+        }
+
+        return "Make sure you save/cancel changes before you leave the page";
     };
 });

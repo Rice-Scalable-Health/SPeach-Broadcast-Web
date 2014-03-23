@@ -19,7 +19,7 @@ a:hover { background-color:yellow; }
 
 	<!-- Text output area. Propagates using ng-repeat -->
 	<div style="padding-left:2cm;">
-   		<a href="#" ng-class="{blocked: user.blocked}" ng-click="edit($index)" ng-repeat="user in editables" editable-text="user.name" onbeforesave="sendDataFromEditables($index, $data)">{{ user.name || "◻︎" }}<br></a>
+   		<a href="#" ng-class="{blocked: user.blocked}" ng-click="blockOption($index)" ng-repeat="user in editables" onshow="saveXEditableIndex($index)" editable-text="user.name" oncancel="unblockOption($index)" onbeforesave="unblockOption($index);sendDataFromEditables($index, $data)">{{ user.name || "◻︎" }}<br></a>
     	<!-- <a href="#" editable-select="user.status" e-ng-options="s.value as s.text for s in statuses">{{ showStatus() }}</a> -->
     </div>
 </div>
