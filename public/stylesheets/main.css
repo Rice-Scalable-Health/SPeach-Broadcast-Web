@@ -12,6 +12,7 @@ h1 {text-align:center}
 	position: relative;
 	height: 100%;
 	width: 100%;
+    padding-bottom: 500px;
 }
 
 #volunteer_textarea
@@ -20,7 +21,7 @@ h1 {text-align:center}
 	border-right: none;
 	outline: none;
 	padding-top:10px;
-	padding-bottom:10px;
+	padding-bottom:50px;
 	width: 100%;
 	min-height: 300px;
 	font-size: 14pt;
@@ -31,6 +32,7 @@ h1 {text-align:center}
 	position: relative;
 	height: 100%;
 	width: 100%;
+	padding-bottom: 500px;
 }
 
 #viewer_textarea
