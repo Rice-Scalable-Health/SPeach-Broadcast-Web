@@ -1,0 +1,103 @@
+@(nameForm: Form[_], idForm: Form[_])
+
+@main("Live Editing - SPeach", "") {
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/">SPeach</a>
+            </div>
+            <div class="collapse navbar-collapse navbar-ex1-collapse">
+                <ul class="nav navbar-nav">
+                    <li>
+                    @helper.form(action = routes.Application.newSession) {
+                        @helper.input(nameForm("name"), '_showConstraints -> false, '_label -> "") { (id, name, value, args) =>
+                            <input type="text" name="@name" id="@id" placeholder="session name" @toHtmlArgs(args)>
+                        } 
+                        <input type="submit" value="Start a New Session" class="btn btn-primary btn-lg">
+                    }
+                    </li>
+                    <li>
+                    @helper.form(action = routes.Application.joinSession) {
+                        @helper.input(nameForm("sessionId"), '_showConstraints -> false, '_label -> "") { (id, name, value, args) =>
+                            <input type="text" name="@name" id="@id" placeholder="session ID" @toHtmlArgs(args)>
+                        } 
+                        <input type="submit" value="Join a Session" class="btn btn-primary btn-lg">
+                    }
+                    </li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="/instructions">How To Use</a>
+                    </li>
+                    <li>
+                        <form method="get" action="/download">
+                        <button type="submit" id="dlbutton" class="btn btn-primary btn-lg">Download App</button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
+
+    <div id="centering">
+        <h2>How to use SPeach</h2>
+        <p>Hello. Welcome to SPeach. SPeach creates real-time speech-to-text transcription with the additional capability of correcting the output for improved accuracy. SPeach will leverage on a student volunteer to perfect a lecture transcript in real-time, with the option for the professor to finalize edits. Other students will be able to view the transcript in real time. The transcripts can then be saved for later. Through our simple, yet powerful automatic captioning system, SPeach improves on existing accommodations for those with a hearing disability.</p>
+        <p>If you are a speaker, please first download our app from the download button located in the top right hand corder of this website.</p>
+
+        <h3>1. Create a Sesion</h3>
+        <p>To start a new SPeach session, enter a session name in the left most input field and click "Start a New Session."</p>
+        <img class="instructions" id="instruction1" src="@routes.Assets.at("images/instructions/1.png")">
+        <p>Once you press the button, you will see a blank page. This is the viewers' page. First notice that you have a session ID. This is unique to your session. Viewers will use this ID to join your session.</p>
+        <img class="instructions" id="instruction2" src="@routes.Assets.at("images/instructions/2.png")">
+
+        <h3>2. Join a Session</h3>
+        <p>If you are an editor or a viewer, please obtain a session ID from the person who created the session. Enter the session ID and click on "Join a Session." Once you press the button, you will also be directed to the viewers' page.</p>
+        <img class="instructions" id="instruction3" src="@routes.Assets.at("images/instructions/3.png")">
+
+        <h3>3. Start the mobile App</h3>
+        <p>Now if you are a speaker, please start the app. Click on the "Start Lecture mode" button, then enter the session ID and click on "start" button. You should hear a little jingle. The sound indicates that the app is ready for you to speak. Please speak in to the phone.<p>
+
+        <h3>4. Edit an Utterance</h3>
+        <p>Now back on the website, click on the "editor" link. You will see a transcript of the speaker's speech. Notice that you can edit the lines. This is where the editor corrects and errors in the speech transcription system.</p>
+        <img class="instructions" id="instruction4" src="@routes.Assets.at("images/instructions/4.png")">
+
+        <h3>5. Request for Clarification</h3>
+        <p>On the viewers' page, you can click on any of the utterances. By clicking them, you can append two stars (**) in front of the utterance. This allows the viewers to communicate which utterance needs clarification to the editor. Editor will see these stars and make an effort to correct/clarify the utterance.</p>
+        <img class="instructions" id="instruction5" src="@routes.Assets.at("images/instructions/5.png")">
+
+        <h3>Enjoy!</h3>
+
+    </div>
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,22 @@
+@(sessionId: String)
+
+@main("Edit Transcript - SPeach", sessionId) {
+    <script type="text/javascript">
+        var sessionId = "@sessionId";
+    </script>
+
+<!-- Main text output area -->
+<div ng-controller="SharedTxtCtrl">
+	<!-- Box to send data to server -->
+	<!--<div>-->
+		<!--<input type="text" ng-model="inputText" />-->
+      	<!--<button ng-click="sendData()">Send</button>-->
+	<!--</div>-->
+	<!--<br>-->
+
+	<!-- Text output area. Propagates using ng-repeat -->
+	<div id="volunteer_box">
+   		<textarea msd-elastic id="volunteer_textarea" ng-model="htmlcontent"></textarea>
+    </div>
+</div>
+}
