@@ -7,6 +7,7 @@ import play.data.Form;
 import play.mvc.*;
 import playextension.EventSource;
 import java.io.File;
+import java.math.BigDecimal;
 
 import static play.data.Form.form;
 
@@ -98,7 +99,7 @@ public class Application extends Controller {
         // pull out the text and confidence from the sent string.
         String[] textAndConfidence = textBody.split("&&&");
         String text = textAndConfidence[0];
-        Double confidence = Double.parseDouble(textAndConfidence[1]);
+        BigDecimal confidence = new BigDecimal(textAndConfidence[1]);
 
         // create the raw utterance in the database.
         RawUtterance.create(text, confidence);

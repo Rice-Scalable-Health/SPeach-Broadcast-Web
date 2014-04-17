@@ -8,6 +8,7 @@ import javax.persistence.Id;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -37,7 +38,8 @@ public class RawUtterance extends Model {
     /**
      * Confidence score from the STT service.
      */
-    private double confidence;
+    @Column(columnDefinition = "NUMERIC")
+    private BigDecimal confidence;
 
     /**
      * Finder for RawUtterance's
@@ -49,7 +51,7 @@ public class RawUtterance extends Model {
      * @param text The text of the utterance, from a STT service.
      * @param confidence The confidence of the utterance, from a STT service.
      */
-    public RawUtterance(String text, double confidence) {
+    public RawUtterance(String text, BigDecimal confidence) {
         this.timestamp = new Timestamp(new java.util.Date().getTime()).toString();
         this.text = text;
         this.confidence = confidence;
@@ -82,7 +84,7 @@ public class RawUtterance extends Model {
      * @param confidence The confidence to create the raw utterance with.
      * @return The newly created RawUtterance.
      */
-    public static RawUtterance create(String text, double confidence) {
+    public static RawUtterance create(String text, BigDecimal confidence) {
         RawUtterance rawUtterance = new RawUtterance(text, confidence);
         rawUtterance.save();
         return rawUtterance;
