@@ -6,6 +6,8 @@
     <head>
         <title>@title</title>
 
+        <meta name="google-translate-customization" content="3225f98418ead92f-f77d9d24af378ef8-ged46520699af9a97-11"></meta>
+
         <link rel="stylesheet" media="screen" href="@routes.Assets.at("bower_components/bootstrap/dist/css/bootstrap.css")">
         <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/main.css")">
 
@@ -53,7 +55,13 @@
             <!-- /.container -->
         </nav>
     }
-
+    @if(title == "View Transcript - SPeach") {
+        <div id="google_translate_element"></div><script type="text/javascript">
+            function googleTranslateElementInit() {
+              new google.translate.TranslateElement({pageLanguage: 'en', layout: google.translate.TranslateElement.InlineLayout.SIMPLE}, 'google_translate_element');
+            }
+        </script><script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    }
         <div class="container">
         @content
         </div>
