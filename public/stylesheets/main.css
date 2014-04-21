@@ -102,6 +102,7 @@ dt {
 .viewer-text {
     font-size: 15pt;
     display: block;
+    color: #428bca !important;
 }
 
 a {
