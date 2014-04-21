@@ -60,14 +60,20 @@ public class Application extends Controller {
         if (Session.findById(id) == null) {
             return redirect(routes.Application.index());
         }
-        return ok(views.html.editor.render(id));
+        Session session = Session.findById(id);
+        String sessionName = session.getName();
+
+        return ok(views.html.editor.render(id, sessionName));
     }
 
     public static Result viewTranscript(String id) {
         if (Session.findById(id) == null) {
             return redirect(routes.Application.index());
         }
-        return ok(views.html.viewTranscript.render(id));
+        Session session = Session.findById(id);
+        String sessionName = session.getName();
+
+        return ok(views.html.viewTranscript.render(id, sessionName));
     }
 
     public static Result requestHelp(String id) {

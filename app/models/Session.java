@@ -35,6 +35,14 @@ public class Session extends Model {
     private String sessionHash;
 
     /**
+     * Gets the session name.
+     * @return The session name.
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
      * The name of the session.
      */
     private String name;

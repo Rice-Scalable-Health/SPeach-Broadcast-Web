@@ -104,6 +104,10 @@ dt {
     display: block;
 }
 
+a {
+    color: #fff !important;
+}
+
 a:hover {
     text-decoration: none;
 }
@@ -115,4 +119,7 @@ a:hover {
 .session-id:hover {
     color: #999 !important;
     cursor: default;
+}
+.session-id {
+    color: #999 !important;
 }

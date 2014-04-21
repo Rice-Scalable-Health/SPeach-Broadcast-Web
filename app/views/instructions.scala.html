@@ -1,6 +1,6 @@
 @(nameForm: Form[_], idForm: Form[_])
 
-@main("Live Editing - SPeach", "") {
+@main("Live Editing - SPeach", "", "") {
     <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
         <div class="container">
             <div class="navbar-header">
@@ -17,7 +17,7 @@
                     <li>
                     @helper.form(action = routes.Application.newSession) {
                         @helper.input(nameForm("name"), '_showConstraints -> false, '_label -> "") { (id, name, value, args) =>
-                            <input type="text" name="@name" id="@id" placeholder="session name" @toHtmlArgs(args)>
+                            <input type="text" name="@name" id="@id" placeholder="Session Name" @toHtmlArgs(args)>
                         }
                         <input type="submit" value="Start a New Session" class="btn btn-primary btn-lg">
                     }
@@ -25,7 +25,7 @@
                     <li>
                     @helper.form(action = routes.Application.joinSession) {
                         @helper.input(nameForm("sessionId"), '_showConstraints -> false, '_label -> "") { (id, name, value, args) =>
-                            <input type="text" name="@name" id="@id" placeholder="session ID" @toHtmlArgs(args)>
+                            <input type="text" name="@name" id="@id" placeholder="Session ID" @toHtmlArgs(args)>
                         } 
                         <input type="submit" value="Join a Session" class="btn btn-primary btn-lg">
                     }
