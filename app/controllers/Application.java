@@ -23,8 +23,8 @@ public class Application extends Controller {
 
     public static Result downloadApp() {
         response().setContentType("application/x-download");
-        response().setHeader("Content-disposition","attachment; filename=SPeachAPP.md");
-        return ok(new File("public/android-app/SPeachAPP.md"));
+        response().setHeader("Content-disposition","attachment; filename=SPeach-App.apk");
+        return ok(new File("public/android-app/SPeach-App.apk"));
     }
 
     public static Result newSession() {

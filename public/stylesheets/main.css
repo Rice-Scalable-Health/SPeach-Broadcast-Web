@@ -123,3 +123,7 @@ a:hover {
 .session-id {
     color: #999 !important;
 }
+
+.download-button {
+		padding: 0 10px;
+}
