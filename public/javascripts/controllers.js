@@ -102,7 +102,10 @@ sharedTextApp.controller('SharedTxtCtrl', function($scope, $http, $timeout, db) 
                 db.store(newTranscript);
             }
 
-            db.append(transcriptWithNewLines);
+
+            if (transcriptWithNewLines !== db.getString()) {
+                db.append(transcriptWithNewLines);
+            }
 
             $scope.htmlcontent = db.getString();
         });
