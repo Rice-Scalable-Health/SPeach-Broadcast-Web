@@ -128,3 +128,7 @@ a:hover {
 .download-button {
 		padding: 0 10px;
 }
+
+span {
+    color: #000;
+}
